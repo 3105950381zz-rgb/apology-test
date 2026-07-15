@@ -3,134 +3,114 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no">
-<title>求生欲测试</title>
+<title>想和好？先过我这关</title>
+<script src="https://cdn.jsdelivr.net/npm/html2canvas@1.4.1/dist/html2canvas.min.js"></script>
 <style>
 *{margin:0;padding:0;box-sizing:border-box}
-body{font-family:'PingFang SC','Microsoft YaHei',sans-serif;background:#fdf2f8;color:#4a1a2e;min-height:100vh;overflow-x:hidden}
-.bg{position:fixed;inset:0;z-index:-2;background:linear-gradient(180deg,#fdf2f8,#fce7f3,#fbcfe8)}
-.hearts{position:fixed;inset:0;z-index:-1;pointer-events:none;overflow:hidden}
-.heart{position:absolute;font-size:18px;animation:float linear infinite;opacity:.15}
-@keyframes float{0%{transform:translateY(100vh) rotate(0deg);opacity:0}10%{opacity:.15}90%{opacity:.15}100%{transform:translateY(-10vh) rotate(360deg);opacity:0}}
+body{font-family:'PingFang SC','Microsoft YaHei',sans-serif;background:#fffbeb;color:#3f2a1d;min-height:100vh;overflow-x:hidden}
+.bg{position:fixed;inset:0;z-index:-2;background:linear-gradient(180deg,#fffbeb,#fef3c7)}
 #app{min-height:100vh;max-width:480px;margin:0 auto;padding:0;display:flex;flex-direction:column}
 
 /* HOME */
 .home{display:flex;flex-direction:column;align-items:center;justify-content:center;flex:1;padding:40px 24px;text-align:center}
-.home-icon{font-size:72px;margin-bottom:12px;animation:bounce 2s infinite}
-@keyframes bounce{0%,100%{transform:translateY(0)}50%{transform:translateY(-12px)}}
-.home h1{font-size:30px;font-weight:800;margin-bottom:8px;background:linear-gradient(135deg,#ec4899,#e11d48);-webkit-background-clip:text;-webkit-text-fill-color:transparent}
-.home p{font-size:13px;color:#831843;opacity:.5;line-height:1.8;margin-bottom:24px;max-width:320px}
-.home .sub{display:inline-block;padding:4px 14px;border-radius:999px;font-size:11px;font-weight:600;background:rgba(236,72,153,.1);color:#ec4899;margin-bottom:16px}
+.home-icon{font-size:72px;margin-bottom:12px}
+.home h1{font-size:28px;font-weight:800;margin-bottom:6px;color:#3f2a1d}
+.home p{font-size:13px;color:#6b4a2e;opacity:.5;line-height:1.8;margin-bottom:6px;max-width:320px}
+.home .notice{padding:12px 16px;border-radius:10px;background:rgba(239,68,68,.06);border:1px solid rgba(239,68,68,.1);font-size:12px;color:#b91c1c;margin:20px 0;line-height:1.6;max-width:320px}
+.home .emojis{font-size:28px;margin-bottom:10px;letter-spacing:4px}
 .btn{width:100%;padding:16px;border:none;border-radius:12px;font-size:16px;font-weight:700;cursor:pointer;font-family:inherit;transition:all .2s;display:flex;align-items:center;justify-content:center;gap:8px}
 .btn:active{transform:scale(.96)}
-.btn-primary{background:linear-gradient(135deg,#ec4899,#e11d48);color:#fff;box-shadow:0 4px 20px rgba(225,29,72,.2)}
-.btn-second{background:rgba(255,255,255,.6);color:#831843;border:1px solid rgba(236,72,153,.15)}
+.btn-primary{background:#3f2a1d;color:#fffbeb;box-shadow:0 4px 16px rgba(63,42,29,.15)}
+.btn-primary:hover{background:#5a3d2b}
+.btn-second{background:rgba(255,255,255,.5);color:#6b4a2e;border:1px solid rgba(63,42,29,.1)}
 
 /* QUIZ */
 .q-screen{display:none;flex-direction:column;flex:1;padding:24px 20px}
 .q-screen.active{display:flex}
 .q-progress{margin-bottom:20px}
-.q-bar-bg{height:6px;background:rgba(236,72,153,.1);border-radius:3px;overflow:hidden}
-.q-bar{height:100%;border-radius:3px;background:linear-gradient(90deg,#f472b6,#ec4899);transition:width .4s ease}
-.q-num{font-size:12px;color:#831843;opacity:.4;margin-top:6px;text-align:right}
-.q-question{font-size:17px;font-weight:700;line-height:1.6;margin-bottom:20px;color:#4a1a2e}
+.q-bar-bg{height:6px;background:rgba(63,42,29,.06);border-radius:3px;overflow:hidden}
+.q-bar{height:100%;border-radius:3px;background:linear-gradient(90deg,#f59e0b,#d97706);transition:width .4s ease}
+.q-num{font-size:12px;color:#6b4a2e;opacity:.3;margin-top:6px;text-align:right}
+.q-question{font-size:17px;font-weight:700;line-height:1.6;margin-bottom:20px;color:#3f2a1d}
 .q-opts{display:flex;flex-direction:column;gap:8px}
-.q-opt{width:100%;padding:16px;border:1.5px solid rgba(236,72,153,.12);border-radius:12px;background:rgba(255,255,255,.65);font-size:14px;color:#4a1a2e;cursor:pointer;text-align:left;font-family:inherit;transition:all .2s;line-height:1.5;backdrop-filter:blur(4px)}
-.q-opt:hover{border-color:#f472b6;background:rgba(255,255,255,.85)}
+.q-opt{width:100%;padding:16px;border:1.5px solid rgba(63,42,29,.08);border-radius:12px;background:rgba(255,255,255,.6);font-size:14px;color:#3f2a1d;cursor:pointer;text-align:left;font-family:inherit;transition:all .2s;line-height:1.5}
+.q-opt:hover{border-color:#f59e0b;background:rgba(255,255,255,.8)}
 .q-opt:active{transform:scale(.97)}
-.q-opt.selected{border-color:#ec4899;background:rgba(236,72,153,.08)}
-.q-opt .tag{display:inline-flex;align-items:center;justify-content:center;width:24px;height:24px;border-radius:50%;font-size:11px;font-weight:700;margin-right:10px;color:#fff;flex-shrink:0}
-.q-opt .s1{background:#f472b6}.q-opt .s2{background:#ec4899}.q-opt .s3{background:#db2777}.q-opt .s4{background:#be185d}
+.q-opt.selected{border-color:#d97706;background:rgba(245,158,11,.08)}
+.q-opt .tag{display:inline-flex;align-items:center;justify-content:center;width:22px;height:22px;border-radius:6px;font-size:10px;font-weight:700;margin-right:10px;color:#fff;flex-shrink:0}
+.q-opt .s1{background:#f59e0b}.q-opt .s2{background:#d97706}.q-opt .s3{background:#b45309}.q-opt .s4{background:#92400e}
 
 /* RESULT */
 .r-screen{display:none;flex-direction:column;padding:32px 20px 24px}
 .r-screen.active{display:flex}
 .r-center{text-align:center}
-.r-icon{font-size:80px;margin-bottom:8px}
-.r-badge{display:inline-block;padding:5px 16px;border-radius:999px;font-size:12px;font-weight:700;margin-bottom:14px}
-.r-title{font-size:22px;font-weight:800;margin-bottom:6px;color:#4a1a2e}
-.r-sub{font-size:13px;color:#831843;opacity:.4;margin-bottom:20px}
-.r-desc{padding:16px;border-radius:12px;background:rgba(255,255,255,.7);border:1px solid rgba(236,72,153,.08);margin-bottom:16px;font-size:13px;line-height:1.8;color:#4a1a2e}
-.r-actions{display:flex;flex-direction:column;gap:8px;margin-top:auto;padding-top:16px}
-.r-actions .btn-second{background:rgba(255,255,255,.5);border-color:rgba(236,72,153,.1)}
-.r-tip{font-size:11px;color:#831843;opacity:.3;text-align:center;margin-top:12px;line-height:1.6}
+.r-score{font-size:64px;font-weight:800;margin:8px 0}
+.r-badge{display:inline-block;padding:5px 16px;border-radius:999px;font-size:12px;font-weight:700;margin-bottom:10px}
+.r-title{font-size:22px;font-weight:800;margin-bottom:4px;color:#3f2a1d}
+.r-sub{font-size:12px;color:#6b4a2e;opacity:.4;margin-bottom:16px}
+.r-desc{padding:16px;border-radius:12px;background:rgba(255,255,255,.6);border:1px solid rgba(63,42,29,.06);margin-bottom:16px;font-size:13px;line-height:1.8;color:#3f2a1d}
+.r-actions{display:flex;flex-direction:column;gap:8px;margin-top:auto;padding-top:12px}
 </style>
 </head>
 <body>
 <div class="bg"></div>
-<div class="hearts" id="hearts"></div>
 <div id="app"></div>
 
 <script>
-(function(){
-  const c=document.getElementById('hearts');
-  for(let i=0;i=15;i++){
-    const h=document.createElement('div');h.className='heart';
-    h.textContent='💕';h.style.left=Math.random()*100+'%';
-    h.style.animationDuration=(8+Math.random()*14)+'s';
-    h.style.animationDelay=Math.random()*8+'s';
-    h.style.fontSize=(12+Math.random()*16)+'px';c.appendChild(h);
-  }
-})();
-
-const Q=[{q:'我们吵架了，你觉得你的第一反应应该是？',o:['先冷静一下，想想自己哪里错了','冲上去就说"你到底想怎样"','直接关门走人','发个可爱的表情包试探TA']},
-{q:'你发消息TA不回，你会？',o:['耐心等，TA可能在忙','连发十几条"人呢人呢"','打电话追问问什么不回','发一张我们以前的合照回忆一下']},
-{q:'你意识到是你错了，你通常怎么开口？',o:['直接说"对不起我错了"','发个道歉的表情包过去','写一篇小作文细细反思','假装无事发生，等TA先说话']},
-{q:'你觉得求和最好的方式是什么？',o:['认真谈一次把问题说开','买TA喜欢吃的送到TA面前','直接抱住TA不放','写一封信给TA']},
-{q:'TA说"你根本不知道你错在哪"，你会？',o:['认真想想然后说"我好像知道了你听我说对不对"','"那你告诉我啊你不说我怎么知道"','"我就没错是你太敏感了"','"我确实不知道但我很想搞清楚你告诉我好不好"']},
-{q:'你想求和但TA还在生气，你会？',o:['给TA一点空间但传达"我在等你"','不停发消息直到TA回为止','找TA朋友帮忙说情','出现在TA面前，带TA喜欢的东西']},
-{q:'以下哪个道歉方式你觉得最有用？',o:['真心诚意地说对不起+具体说错在哪','发红包转账','写检讨书签字画押','用行动证明而不是嘴上说']},
-{q:'如果TA说"我们冷静一下吧"，你会理解成？',o:['给彼此一点空间思考问题','TA要跟我分手了','TA在给我机会让我反思','TA不爱我了']},
-{q:'你觉得求和过程中最重要的是？',o:['让TA感觉到我真的懂了','让TA消气就行','证明我没做错','让TA笑出来就好了']},
-{q:'感情里你更认同哪句话？',o:['赢了道理输了感情是最亏的','谁错谁道歉天经地义','爱一个人不需要道歉','吵完架谁先说话谁是狗']}];
+const Q=[{q:'你昨晚惹TA生气了，今天醒来第一件事你会？',o:['马上发消息问TA醒了没吃早餐没','假装什么也没发生发个表情包','等TA先发消息来','翻聊天记录看看TA有多生气然后想对策']},
+{q:'你主动道歉了，TA回了个"嗯"，你会？',o:['再接再厉说"我真的很抱歉你愿意跟我聊聊吗"','好的那我也沉默了','再发十条消息解释自己','问TA"你嗯是什么意思"']},
+{q:'你觉得你现在最应该做的事情是？',o:['认真搞清楚TA为什么生气然后真诚道歉','等TA消气再说吧','买个礼物给TA惊喜','让TA知道我心里有TA但不一定说出口']},
+{q:'TA说你根本不知道自己做错了什么，你第一反应是？',o:['好那你说给我听我这次一定认真听','你每次都这样不给我机会解释','我知道我肯定有哪里没做对但我不确定是哪里你跟我讲讲','你觉得我错那就算我错了吧']},
+{q:'你拿着手机站在TA面前，你会说的第一句话是？',o:['对不起我来了你有什么想说的我都听','你还在生气吗别气了好不好','我错了原谅我吧','我来认错了，你骂我吧我不还口']},
+{q:'你怎么让TA相信你是真心道歉不是敷衍？',o:['看着TA眼睛认真说清楚我错在哪以后怎么改','用行动证明不是靠嘴巴说','发个大红包表示诚意','写保证书按手印']},
+{q:'TA还是很冷淡，你会？',o:['不放弃但给TA空间，偶尔传递"我还在"的信号','那我也冷淡回去','直接出现在TA面前抱住TA','找TA身边的人帮忙说情']},
+{q:'你觉得道歉里最重要的部分是？',o:['让TA感觉到我是真的懂了TA为什么难过','说清楚事情经过谁对谁错','表达我有多后悔','承诺以后不会再犯']},
+{q:'这次和好后，你觉得你应该怎么做？',o:['反思自己哪里有问题真的改，不让同一个问题发生第二次','和好了就好了过去就过去了','对TA更好更细心让TA看到我的改变','以后注意点别再踩雷']},
+{q:'最后，你想对TA说的一句话是？',o:['对不起让你难过了，我在改，你再给我一次机会好不好','别生气了嘛','我爱你，这句话永远有效','我知道我很过分但我真的知道错了']}];
 
 const R=[
-  {min:0,max:5,icon:'😅',badge:'负分求生欲',badgeStyle:'background:rgba(239,68,68,.1);color:#ef4444',title:'你要被扫地出门了',desc:'你的求生欲基本处于离线状态。你对象现在可能已经在想"我当初怎么看上TA的"。如果你还想挽回，建议赶紧放下手机，带上TA爱吃的东西出现在TA门口，第一句话就说"我错了"，别解释，先认。'},
-  {min:6,max:10,icon:'😬',badge:'勉强及格',badgeStyle:'background:rgba(251,146,60,.1);color:#fb923c',title:'还有救但不多',desc:'你还是有点求生欲的，就是表达方式有待提高。你心里知道错在哪但你不太会说。建议别用表情包蒙混过关，认真说一次"我哪里错了、为什么错、以后怎么做"三件套，比你发一百个跪地表情包管用。'},
-  {min:11,max:15,icon:'😊',badge:'求生欲在线',badgeStyle:'background:rgba(250,204,21,.1);color:#ca8a04',title:'TA已经在心软了',desc:'你的求生欲水平不错，说明你平时还是有认真谈恋爱的。你懂得给空间也懂得主动求和，你的TA其实已经在等一个台阶下了。去买一束花或者做一顿饭，不用多隆重，但一定是TA喜欢的东西。加上一句认真的"对不起"，这事就成了。'},
-  {min:16,max:20,icon:'🥰',badge:'满级求生欲',badgeStyle:'background:rgba(34,197,94,.1);color:#16a34a',title:'你是懂谈恋爱的',desc:'满分选手！你太会了。你既知道什么时候该给空间，又知道怎么开口求和，还懂得用行动而不是嘴皮子道歉。你对象有你真的是TA走运。不过也要记住——求生欲再强，也不如一开始就不要让TA难过。去吧，TA等你很久了。'},
-  {min:21,max:30,icon:'🤯',badge:'天花板级别',badgeStyle:'background:rgba(236,72,153,.1);color:#ec4899',title:'你对象上辈子拯救了银河系',desc:'你的求生欲已经超越了人类极限。你对象就算再生气，碰到你这样的小宝贝也气不起来了。不过说真的——你这么会哄人，确定不是海王吗？（开玩笑的）赶紧去把TA抱回来吧，TA其实早就不生气了，就是在等你来。'}];
+  {min:0,max:3,icon:'😤',c:'#ef4444',badge:'不及格',bs:'background:rgba(239,68,68,.1);color:#ef4444',title:'TA现在不想见到你',desc:'你这个分数……说实话TA没把你拉黑已经很有素质了。你连敷衍都懒得敷衍，TA怎么可能感受不到？如果你还想在这段关系里继续待着，建议你现在立刻马上出现在TA面前，什么都不用说先抱住。说多错多，行动比解释重要。'},
+  {min:4,max:6,icon:'😐',c:'#f59e0b',badge:'勉强及格',bs:'background:rgba(245,158,11,.1);color:#b45309',title:'TA在犹豫要不要原谅你',desc:'你有道歉的心但你的方式还停留在"我觉得我道过歉了"的层面。TA要的不是一句"对不起"，是"我知道我哪里让你难过了"。认真想想TA最近一次失望的表情，那才是你要道歉的原因。别糊弄，TA看得出来。'},
+  {min:7,max:10,icon:'😊',c:'#10b981',badge:'良好',bs:'background:rgba(16,185,129,.1);color:#059669',title:'TA已经在心软了',desc:'你的求生欲不错，你是真的有在认真想怎么道歉。TA其实不是真的想一直生气，TA在等你给出那个让TA能原谅你的理由。去见TA吧，把你在测试里选的那些答案变成行动。TA已经在等你了。'},
+  {min:11,max:15,icon:'🥹',c:'#3b82f6',badge:'满分',bs:'background:rgba(59,130,246,.1);color:#2563eb',title:'你通过了！TA原谅你了',desc:'满分选手！你是真的懂TA在意什么。你已经在用正确的方式思考问题了。现在不要犹豫，拿着这个截图去找TA，把你在测试里选的答案全部兑现。TA看到这个结果其实就已经消气了——TA要的从来不是赢你，是看到你在乎。'},
+  {min:16,max:20,icon:'😭',c:'#ec4899',badge:'天花板',bs:'background:rgba(236,72,153,.1);color:#db2777',title:'TA已经感动得不行了',desc:'你不仅是满分，你已经是求生欲天花板了。你完全知道怎么让TA消气，怎么让TA心软。但你也要知道——每一次被原谅都是信任的透支。TA原谅你不是因为你会道歉，是因为TA爱你。希望你以后在让TA生气之前先想想这道题。现在去找TA吧，TA等你很久了。'}];
 
-let cur=0,ans=0;
-const LABELS=['A','B','C','D'];
+let cur=0,s=0;
+const L=['A','B','C','D'];
 const A=document.getElementById('app');
 
-function go(){
-  cur=0;ans=0;renderQ();
-  document.querySelector('.home')?.remove();
+function go(){cur=0;s=0;A.innerHTML='';rQ();}
+
+function rQ(){
+  if(cur>=Q.length){shR();return;}
+  const q=Q[cur];const p=cur/Q.length*100;
+  A.innerHTML='<div class="q-screen active"><div class="q-progress"><div class="q-bar-bg"><div class="q-bar" style="width:'+p+'%"></div></div><div class="q-num">'+(cur+1)+'/'+Q.length+'</div></div><div class="q-question">'+q.q+'</div><div class="q-opts">'+
+    q.o.map((t,i)=>'<button class="q-opt" onclick="pk('+i+')"><span class="tag s'+(i+1)+'">'+L[i]+'</span>'+t+'</button>').join('')+'</div></div>';
 }
 
-function renderQ(){
-  if(cur>=Q.length){showR();return;}
-  const q=Q[cur];const pct=cur/Q.length*100;
-  A.innerHTML='<div class="q-screen active"><div class="q-progress"><div class="q-bar-bg"><div class="q-bar" style="width:'+pct+'%"></div></div><div class="q-num">'+(cur+1)+'/'+Q.length+'</div></div><div class="q-question">'+q.q+'</div><div class="q-opts">'+
-    q.o.map((t,i)=>'<button class="q-opt" onclick="pick('+i+')"><span class="tag s'+(i+1)+'">'+(i+1)+'</span>'+t+'</button>').join('')+'</div></div>';
+function pk(i){
+  document.querySelectorAll('.q-opt').forEach(b=>b.style.pointerEvents='none');
+  document.querySelectorAll('.q-opt')[i].classList.add('selected');
+  s+=(3-i);
+  setTimeout(()=>{cur++;rQ();},300);
 }
 
-function pick(i){
-  const btns=document.querySelectorAll('.q-opt');
-  btns.forEach(b=>b.style.pointerEvents='none');
-  btns[i].classList.add('selected');
-  ans+=(3-i);
-  setTimeout(()=>{cur++;renderQ();},300);
+function shR(){
+  const r=R.find(r=>s>=r.min&&s<=r.max)||R[R.length-1];
+  A.innerHTML='<div class="r-screen active"><div class="r-center"><div style="font-size:72px;margin-bottom:6px">'+r.icon+'</div><div class="r-badge" style="'+r.bs+'">'+r.badge+'</div><div class="r-score" style="color:'+r.c+'">'+s+'</div><div class="r-title">'+r.title+'</div><div class="r-sub">满分20分 · 总分'+s+'分</div></div><div class="r-desc">'+r.desc+'</div><div class="r-actions"><button class="btn btn-primary" onclick="cp()">📸 截图发给TA看</button><button class="btn btn-second" onclick="hm()">🔁 重新测</button></div></div>';
 }
 
-function showR(){
-  const r=R.find(r=>ans>=r.min&&ans<=r.max)||R[R.length-1];
-  A.innerHTML='<div class="r-screen active"><div class="r-center"><div class="r-icon">'+r.icon+'</div><div class="r-badge" style="'+r.badgeStyle+'">'+r.badge+'</div><div class="r-title">'+r.title+'</div><div class="r-sub">求生欲指数 '+ans+'/'+(Q.length*3)+'</div></div><div class="r-desc">'+r.desc+'</div><div class="r-actions"><button class="btn btn-primary" onclick="share()">📸 截图发给TA</button><button class="btn btn-second" onclick="hm()">🔁 重新测</button></div><div class="r-tip">截图发给TA，TA看到就消气了 🥹</div></div>';
-}
-
-function share(){
+function cp(){
   const el=document.querySelector('.r-screen');
   if(!el)return;
-  typeof html2canvas==='undefined'
-    ?alert('请手动截图')
-    :html2canvas(el,{backgroundColor:'#fdf2f8',scale:2,useCORS:true,logging:false}).then(c=>{
-      c.toBlob(b=>{const a=document.createElement('a');a.href=URL.createObjectURL(b);a.download='求生欲测试.png';a.click()});
-    }).catch(()=>alert('截图失败请手动截图'));
+  if(typeof html2canvas==='undefined'){alert('请手动截图');return}
+  html2canvas(el,{backgroundColor:'#fffbeb',scale:2,useCORS:true,logging:false}).then(c=>{
+    c.toBlob(b=>{const a=document.createElement('a');a.href=URL.createObjectURL(b);a.download='求和测试.png';a.click()});
+  }).catch(()=>alert('截图失败'));
 }
 
 function hm(){
-  A.innerHTML='<div class="home"><div class="home-icon">🥹</div><div class="sub">💕 情侣专用</div><h1>求生欲测试</h1><p>吵架了？不知道怎么办？<br>测测你的求生欲及格了没<br><span style="opacity:.5;font-size:11px">10道题 · 看看你有多会哄人</span></p><button class="btn btn-primary" onclick="go()">开始测试</button></div>';
+  A.innerHTML='<div class="home"><div class="home-icon">🫵</div><h1>你惹TA生气了</h1><p>做完这份求生欲测试<br>看看你的表现能不能让TA消气</p><div class="notice">⚠️ 认真答，别糊弄<br>TA会看到你的答案</div><button class="btn btn-primary" onclick="go()">开始答题</button><div style="margin-top:16px;font-size:11px;color:#6b4a2e;opacity:.3">给你对象做的 · 答完截图发给TA</div></div>';
 }
 
 hm();
